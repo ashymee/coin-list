@@ -69,4 +69,4 @@ pnpm preview
 
 ---
 
-[LIVE DEMO](https://coin-list.vercel.app)
+[LIVE DEMO](https://coin-list-git-main-ashymeedev.vercel.app/)
