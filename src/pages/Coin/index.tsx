@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import ReactPaginate from "react-paginate";
+import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 
-interface DataProps {
+export interface DataProps {
   id: string;
   name: string;
   symbol: string;
@@ -108,7 +109,9 @@ export default function CoinList() {
               <tbody>
                 {data.slice(itemOffset, endOffset).map((item, index) => (
                   <tr key={index}>
-                    <td className="px-2">{item.id}</td>
+                    <td className="px-2">
+                      <Link to={`/coin/${item.id}`}>{item.id}</Link>
+                    </td>
                     <td className="px-2">{item.name}</td>
                     <td className="px-2">{item.symbol}</td>
                     <td className="px-2">{item.rank}</td>
