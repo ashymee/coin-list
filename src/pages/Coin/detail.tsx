@@ -6,34 +6,24 @@ import useStores from "../../utils/useStores";
 
 export default function CoinDetail() {
   const { id } = useParams();
-  const { singleData, setSingleData, data, setData } = useStores();
+  const { singleData, setSingleData } = useStores();
   const { isDev, URL } = useConstants();
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch(URL.GET_DETAIL).then(async (res) => {
-        const json = await res.json();
+      await fetch(`https://api.coinpaprika.com/v1/coins/${id}`).then(
+        async (res) => {
+          const json = await res.json();
 
-        if (json) {
-          isDev ? setData(json) : setSingleData(json);
+          json && setSingleData(json);
         }
-      });
+      );
     };
 
-    if (data.length < 1) {
-      fetchData();
-    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [URL.GET_DETAIL, isDev]);
 
-  useEffect(() => {
-    if (isDev && data.length > 0) {
-      const dx = data.find((item) => item.id === id);
-
-      dx && setSingleData(dx);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, id, isDev]);
 
   return (
     <Layout>
