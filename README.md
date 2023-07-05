@@ -113,6 +113,7 @@ pnpm preview
 ```
 
 5.3. go to browser, than access `http://localhost:4173`.
+
 ---
 
 [LIVE DEMO](https://coin-list-drab.vercel.app).
