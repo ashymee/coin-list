@@ -14,7 +14,9 @@ export default function CoinDetail() {
       await fetch(URL.GET_DETAIL).then(async (res) => {
         const json = await res.json();
 
-        json && setData(json);
+        if (json) {
+          isDev ? setData(json) : setSingleData(json);
+        }
       });
     };
 
