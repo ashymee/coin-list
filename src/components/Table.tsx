@@ -1,13 +1,22 @@
+import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
-import useFetch from "../utils/useFetch";
-import useStores from "../utils/useStores";
+import useStores, { DataProps } from "../utils/useStores";
 
-export default function Table() {
+export default function Table({ data }: { data: DataProps[] }) {
   const { setDeletedId, isLoading, errorMessage } = useStores();
 
-  const { itemOffset, endOffset, pageCount, handlePageClick, data } =
-    useFetch();
+  // pagination prerequisites
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 4;
+  const endOffset = itemOffset + itemsPerPage;
+  const pageCount = Math.ceil(data.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event: { selected: number }) => {
+    const newOffset = (event.selected * itemsPerPage) % data.length;
+    setItemOffset(newOffset);
+  };
 
   return (
     <div className="flex-1">
