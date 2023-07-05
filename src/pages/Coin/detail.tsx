@@ -1,26 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
-import { DataProps } from ".";
 import Layout from "../../components/Layout";
+import useConstants from "../../utils/useConstants";
+import useStores from "../../utils/useStores";
 
 export default function CoinDetail() {
   const { id } = useParams();
-  const [data, setData] = useState<DataProps | null>(null);
+  const { singleData, setSingleData, data, setData } = useStores();
+  const { isDev, URL } = useConstants();
 
   useEffect(() => {
-    if (id) {
-      const fetchData = async () => {
-        await fetch(`https://api.coinpaprika.com/v1/coins/${id}`).then(
-          async (res) => {
-            const json = await res.json();
-            json && setData(json);
-          }
-        );
-      };
+    const fetchData = async () => {
+      await fetch(URL.GET_DETAIL).then(async (res) => {
+        const json = await res.json();
 
+        json && setData(json);
+      });
+    };
+
+    if (data.length < 1) {
       fetchData();
     }
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [URL.GET_DETAIL, isDev]);
+
+  useEffect(() => {
+    if (isDev && data.length > 0) {
+      const dx = data.find((item) => item.id === id);
+
+      dx && setSingleData(dx);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, id, isDev]);
 
   return (
     <Layout>
@@ -32,27 +43,27 @@ export default function CoinDetail() {
         <div className="flex flex-col gap-y-2">
           <div className="flex items-center gap-x-10">
             <h1 className="w-52">ID</h1>
-            <p>{data?.id}</p>
+            <p>{singleData?.id}</p>
           </div>
 
           <div className="flex items-center gap-x-10">
             <h1 className="w-52">Name</h1>
-            <p>{data?.name}</p>
+            <p>{singleData?.name}</p>
           </div>
 
           <div className="flex items-center gap-x-10">
             <h1 className="w-52">Symbol</h1>
-            <p>{data?.symbol}</p>
+            <p>{singleData?.symbol}</p>
           </div>
 
           <div className="flex items-center gap-x-10">
             <h1 className="w-52">Type</h1>
-            <p>{data?.type}</p>
+            <p>{singleData?.type}</p>
           </div>
 
           <div className="flex items-center gap-x-10">
             <h1 className="w-52">Active</h1>
-            <p>{data?.is_active ? "True" : "False"}</p>
+            <p>{singleData?.is_active ? "True" : "False"}</p>
           </div>
         </div>
       </div>
